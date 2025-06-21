@@ -67,15 +67,19 @@ class StoreComponent(Component):
         conversation: list[tuple[str, str]],
         created: datetime,
         expiration_delta: timedelta = None,
+        participants: list[str] = None, # Signature is correct
     ):
         if expiration_delta is None:
             expiration_delta = timedelta(days=self.cfg.expiration_delta.days)
         expiration = created + expiration_delta
         # s, p, o = prompt_text_to_triple(self.model, summary)
         s, p, o = (None, None, None)
+        
+        # This call will now work correctly because add_chat accepts 'participants'
         node = self.associative_memory.add_chat(
-            s, p, o, summary, conversation, created, expiration
+            s, p, o, summary, conversation, created, expiration, participants=participants
         )
+        
         self._compute_importance(node)
         embedding = self.embedding_model.embed(summary)
         self.associative_memory.set_node_embedding(node.id, embedding)

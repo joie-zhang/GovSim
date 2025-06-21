@@ -177,3 +177,65 @@ def prompt_decide_private_chat(
     model.end_chain(persona.name, lm)
 
     return chosen_persona_name, lm.html()
+
+
+def prompt_converse_utterance_private(
+    model: ModelWandbWrapper,
+    init_persona: PersonaIdentity,
+    target_persona: PersonaIdentity, # Note: singular target
+    init_retrieved_memory: list[str],
+    current_location: str,
+    current_time: datetime,
+    current_conversation: list[tuple[str, str]],
+) -> tuple[str, bool, str]:
+    """Prompts for an utterance in a private one-on-one conversation."""
+    lm = model.start_chain(
+        init_persona.name, "cognition_converse", "converse_utterance_private"
+    )
+
+    with user():
+        lm += f"{get_sytem_prompt(init_persona)}\n"
+        lm += location_time_info(current_location, current_time)
+        lm += memory_prompt(init_persona, init_retrieved_memory)
+        lm += "\n"
+        lm += (
+            f"Scenario: You are in a private conversation with {target_persona.name}."
+        )
+        lm += "\nConversation so far:\n"
+        lm += f"{conversation_to_string_with_dash(current_conversation)}\n\n"
+        # Define the task for the language model
+        lm += (
+            f"Task: What would you say next to {target_persona.name}? "
+            "Determine if your response concludes the conversation. "
+        )
+        # Define the format for the output
+        RESPONSE = "Response: "
+        ANSWER_STOP = "Conversation conclusion by me: "
+
+        lm += "Output format:\n"
+        lm += RESPONSE + "[fill in]\n"
+        lm += ANSWER_STOP + "[yes/no]\n"
+
+    with assistant():
+        lm += RESPONSE
+        lm = model.gen(
+            lm,
+            name="utterance",
+            default_value="",
+            stop_regex=r"Conversation conclusion by me:",
+        )
+        utterance = lm["utterance"].strip()
+        if len(utterance) > 0 and utterance[-1] == '"' and utterance[0] == '"':
+            utterance = utterance[1:-1]
+        lm += ANSWER_STOP
+        lm = model.select(
+            lm,
+            name="utterance_ended",
+            options=["yes", "no", "No", "Yes"],
+            default_value="yes",
+        )
+        utterance_ended = lm["utterance_ended"].lower() == "yes"
+
+    model.end_chain(init_persona.name, lm)
+    # We don't need to determine the next speaker, it's always the other person.
+    return utterance, utterance_ended, lm.html()

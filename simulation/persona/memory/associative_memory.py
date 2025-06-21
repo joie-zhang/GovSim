@@ -101,6 +101,7 @@ class Thought(Node):
 
 class Chat(Node):
     conversation: list[tuple[str, str]]
+    participants: list[str] # <<< ADD THIS LINE
 
     def __init__(
         self,
@@ -111,9 +112,11 @@ class Chat(Node):
         description: str,
         created: datetime,
         expiration: datetime,
+        participants: list[str] = None, # <<< ADD 'participants' to the constructor
         always_include: bool = False,
     ) -> None:
         self.conversation = []
+        self.participants = participants or [] # <<< ASSIGN 'participants'
         super().__init__(
             id,
             NodeType.CHAT,
@@ -127,19 +130,13 @@ class Chat(Node):
         )
 
     def toJSON(self):
-        return {
-            "id": self.id,
-            "type": self.type.toJSON(),
-            "subject": self.subject,
-            "predicate": self.predicate,
-            "object": self.object,
-            "description": self.description,
-            "importance_score": self.importance_score,
-            "conversation": self.conversation,
-            "created": self.created.strftime("%Y-%m-%d %H:%M:%S"),
-            "expiration": self.expiration.strftime("%Y-%m-%d %H:%M:%S"),
-            "always_include": "true" if self.always_include else "false",
-        }
+        # Let's also add participants to the JSON output for good measure
+        json_obj = super().toJSON()
+        json_obj.update({
+             "conversation": self.conversation,
+             "participants": self.participants,
+        })
+        return json_obj
 
 
 class Event(Node):
@@ -252,13 +249,15 @@ class AssociativeMemory:
         )
 
     def _add(
-        self, subject, predicate, obj, description, type, created, expiration
+        self, subject, predicate, obj, description, type, created, expiration, participants=None # Add participants here
     ) -> Node:
         id = len(self.id_to_node) + 1
 
         if type == NodeType.CHAT:
-            node = Chat(id, subject, predicate, obj, description, created, expiration)
+            # Pass participants down to the Chat constructor
+            node = Chat(id, subject, predicate, obj, description, created, expiration, participants=participants)
             self.chat_id_to_node[id] = node
+        # ... (rest of the _add method is unchanged)
         elif type == NodeType.THOUGHT:
             node = Thought(
                 id, subject, predicate, obj, description, created, expiration
@@ -279,10 +278,10 @@ class AssociativeMemory:
         return node
 
     def add_chat(
-        self, subject, predicate, obj, description, conversation, created, expiration
+        self, subject, predicate, obj, description, conversation, created, expiration, participants=None # <<< ADD 'participants' here
     ) -> Chat:
         node = self._add(
-            subject, predicate, obj, description, NodeType.CHAT, created, expiration
+            subject, predicate, obj, description, NodeType.CHAT, created, expiration, participants=participants # <<< PASS 'participants' down
         )
         node.conversation = conversation
         return node

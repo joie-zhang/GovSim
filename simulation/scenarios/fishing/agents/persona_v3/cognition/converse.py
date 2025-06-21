@@ -8,6 +8,7 @@ from simulation.utils import ModelWandbWrapper
 
 from .converse_prompts import (
     prompt_decide_private_chat,
+    prompt_converse_utterance_private,
     prompt_converse_utterance_in_group,
     prompt_summarize_conversation_in_one_sentence,
 )
@@ -66,22 +67,25 @@ class FishingConverseComponent(ConverseComponent):
         for _ in range(max_turns):
             focal_points = [f"Private chat with {interlocutor_persona.name}"]
             if len(private_conversation) > 0:
-                focal_points.append(private_conversation[-1][1]) # Add last utterance
-            
-            retrieved_memories = self.other_personas[current_speaker_persona.name].retrieve.retrieve(focal_points, top_k=3)
+                focal_points.append(private_conversation[-1][1])
 
-            # We can reuse the group chat prompt, as it's general enough.
-            # The target_personas list will just have one person in it.
-            utterance, end_conversation, _, h = prompt_converse_utterance_in_group(
+            # Get memories for the current speaker
+            current_speaker_agent = self.other_personas[current_speaker_persona.name]
+            retrieved_memories = current_speaker_agent.retrieve.retrieve(focal_points, top_k=3)
+
+            # --- CHANGE IS HERE ---
+            # Use the new, dedicated private chat prompt
+            utterance, end_conversation, h = prompt_converse_utterance_private(
                 self.model,
                 current_speaker_persona,
-                [interlocutor_persona],
+                interlocutor_persona, # The person being spoken to
                 retrieved_memories,
                 current_location,
                 current_time,
-                f"A private conversation with {interlocutor_persona.name}",
                 self.conversation_render(private_conversation),
             )
+            # --- END OF CHANGE ---
+
             html_interactions.append(h)
             private_conversation.append((current_speaker_persona, utterance))
 
