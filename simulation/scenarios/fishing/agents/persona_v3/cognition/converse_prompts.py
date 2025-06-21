@@ -122,3 +122,58 @@ def prompt_summarize_conversation_in_one_sentence(
 
     model.end_chain("framework", lm)
     return summary, lm.html()
+
+def prompt_decide_private_chat(
+    model: ModelWandbWrapper,
+    persona: PersonaIdentity,
+    memories: list[str],
+    current_location: str,
+    current_time: datetime,
+    other_personas: list[PersonaIdentity],
+) -> tuple[str | None, str]:
+    """Asks the agent if they want to initiate a private chat and with whom."""
+    lm = model.start_chain(
+        persona.name, "cognition_converse", "decide_private_chat"
+    )
+
+    other_persona_names = list_to_comma_string([p.name for p in other_personas])
+    
+    with user():
+        lm += f"{get_sytem_prompt(persona)}\n"
+        lm += location_time_info(current_location, current_time)
+        lm += memory_prompt(persona, memories)
+        lm += "\n"
+        lm += (
+            f"You are in the restaurant with {other_persona_names}. "
+            "Before the group conversation begins, you have an opportunity to pull one person aside for a private one-on-one chat."
+        )
+        lm += (
+            "\nTask: Do you want to initiate a private chat? "
+            "If yes, state the name of the person you want to talk to. "
+            "If no, respond with 'None'."
+        )
+        lm += reasoning_steps_prompt()
+        lm += ' Put the final answer after "Answer:", example Answer: John. or Answer: None.'
+
+    with assistant():
+        lm = model.gen(
+            lm,
+            "reasoning",
+            stop_regex=r"Answer:",
+            save_stop_text=True,
+        )
+        lm += "Answer: "
+        # We'll use a select with an added 'None' option.
+        options = [p.name for p in other_personas] + ["None"]
+        lm = model.select(
+            lm,
+            name="decision",
+            options=options,
+            default_value="None",
+        )
+        
+        chosen_persona_name = lm["decision"] if lm["decision"] != "None" else None
+
+    model.end_chain(persona.name, lm)
+
+    return chosen_persona_name, lm.html()
