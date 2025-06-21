@@ -115,9 +115,15 @@ class FishingConverseComponent(ConverseComponent):
             self.persona.current_time,
             participants=[self.persona.identity.name, target_persona.name]
         )
+        if target_persona.name not in self.persona.private_conversations:
+            self.persona.private_conversations[target_persona.name] = []
 
         # Also update the in-memory private conversation history for both
         self.persona.private_conversations[target_persona.name].extend(private_conversation)
+
+        target_agent = self.other_personas[target_persona.name]
+        if self.persona.identity.name not in target_agent.private_conversations:
+            target_agent.private_conversations[self.persona.identity.name] = []
         self.other_personas[target_persona.name].private_conversations[self.persona.identity.name].extend(private_conversation)
 
         return private_conversation, html_interactions
