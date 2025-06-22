@@ -8,16 +8,17 @@ from simulation.persona.memory.associative_memory import (
 from simulation.utils import ModelWandbWrapper
 from pathfinder import assistant, system, user
 
+from typing import List
 from .utils import get_sytem_prompt
 
 
 def prompt_importance_chat(
-    model: ModelWandbWrapper, persona: PersonaIdentity, chat: Chat
+    model: ModelWandbWrapper, persona: PersonaIdentity, other_personas: List[PersonaIdentity], chat: Chat
 ):
     lm = model.start_chain(persona.name, "cognition_retrieve", "prompt_importance_chat")
 
     with user():
-        lm += f"{get_sytem_prompt(persona)}\n"
+        lm += f"{get_sytem_prompt(persona, other_personas)}\n"
         lm += (
             "Task: Rate the significance of a conversation\nOn a scale from 1 to 10,"
             " where 1 indicates a mundane conversation (e.g., routine morning"
@@ -42,12 +43,12 @@ def prompt_importance_chat(
 
 
 def prompt_importance_event(
-    model: ModelWandbWrapper, persona: PersonaIdentity, event: Event
+    model: ModelWandbWrapper, persona: PersonaIdentity, other_personas: List[PersonaIdentity], event: Event
 ):
     lm = model.start_chain(persona.name, "cognition_perceive", "relevancy_event")
 
     with user():
-        lm += f"{get_sytem_prompt(persona)}\n"
+        lm += f"{get_sytem_prompt(persona, other_personas)}\n"
         lm += (
             "Task: Rate the significance of an event\nOn a scale of 1 to 10, where 1"
             " represents everyday, mundane activities (e.g., brushing teeth, making"

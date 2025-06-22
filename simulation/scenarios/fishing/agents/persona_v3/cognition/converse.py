@@ -76,6 +76,9 @@ class FishingConverseComponent(ConverseComponent):
         max_conversation_steps = self.cfg.max_conversation_steps  # TODO
 
         current_persona = self.persona.identity
+        
+        # Get all persona names for the prompts
+        all_persona_names = [p.name for p in target_personas] + [self.persona.identity.name]
 
         while True:
             focal_points = [current_context]
@@ -103,6 +106,7 @@ class FishingConverseComponent(ConverseComponent):
                 current_time,
                 current_context,
                 self.conversation_render(current_conversation),
+                all_persona_names,
             )
             html_interactions.append(h)
 

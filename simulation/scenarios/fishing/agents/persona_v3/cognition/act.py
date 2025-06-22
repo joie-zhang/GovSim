@@ -29,6 +29,7 @@ class FishingActComponent(ActComponent):
         context: str,
         interval: list[int],
         overusage_threshold: int,
+        all_persona_names: list[str],
     ):
         if self.cfg.universalization_prompt:
             context += get_universalization_prompt(overusage_threshold)
@@ -41,6 +42,7 @@ class FishingActComponent(ActComponent):
             context,
             interval,
             consider_identity_persona=self.cfg.consider_identity_persona,
+            all_persona_names=all_persona_names,
         )
         res = int(res)
         return res, [html]

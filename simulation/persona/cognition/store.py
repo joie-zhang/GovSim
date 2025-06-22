@@ -34,7 +34,7 @@ class StoreComponent(Component):
                 self.model, self.persona.identity, node
             )
         elif node.type == NodeType.CHAT:
-            score = self.prompt_importance_chat(self.model, self.persona.identity, node)
+            score = self.prompt_importance_chat(self.model, self.persona.identity, self.persona.other_personas, node)
         elif node.type == NodeType.EVENT:
             score = self.prompt_importance_event(
                 self.model, self.persona.identity, node

@@ -25,11 +25,12 @@ def prompt_action_choose_amount_of_fish_to_catch(
     context: str,
     interval: list[int],
     consider_identity_persona: bool = True,
+    all_persona_names: list[str] = None,
 ):
     lm = model.start_chain(identity.name, "fishing_cognition_act", "choose_act_options")
 
     with user():
-        lm += f"{get_sytem_prompt(identity)}\n"
+        lm += f"{get_sytem_prompt(identity, all_persona_names or [identity.name])}\n"
         lm += location_time_info(current_location, current_time)
         lm += memory_prompt(identity, memories)
         lm += f"\n"

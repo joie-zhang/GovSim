@@ -27,13 +27,14 @@ def prompt_converse_utterance_in_group(
     current_time: datetime,
     current_context: str,
     current_conversation: list[tuple[str, str]],
+    all_persona_names: list[str],
 ) -> tuple[str, bool, str]:
     lm = model.start_chain(
         init_persona.name, "cognition_converse", "converse_utterance"
     )
 
     with user():
-        lm += f"{get_sytem_prompt(init_persona)}\n"
+        lm += f"{get_sytem_prompt(init_persona, all_persona_names)}\n"
         lm += location_time_info(current_location, current_time)
         # List key memories of the initial persona
         lm += memory_prompt(init_persona, init_retrieved_memory)

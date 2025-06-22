@@ -14,14 +14,14 @@ from .utils import (
 
 
 def prompt_insight_and_evidence(
-    model: ModelWandbWrapper, persona: PersonaIdentity, statements: list[str]
+    model: ModelWandbWrapper, persona: PersonaIdentity, statements: list[str], all_persona_names: list[str]
 ):
     lm = model.start_chain(
         persona.name, "cognition_retrieve", "prompt_insight_and_evidence"
     )
 
     with user():
-        lm += f"{get_sytem_prompt(persona)}\n"
+        lm += f"{get_sytem_prompt(persona, all_persona_names)}\n"
         lm += f"{numbered_memory_prompt(persona, statements)}\n"
         lm += (
             f"What high-level insights can you infere from the above"
@@ -67,13 +67,14 @@ def prompt_planning_thought_on_conversation(
     model: ModelWandbWrapper,
     persona: PersonaIdentity,
     conversation: list[tuple[str, str]],
+    all_persona_names: list[str],
 ) -> str:
     lm = model.start_chain(
         persona.name, "cognition_retrieve", "prompt_planning_thought_on_conversation"
     )
 
     with user():
-        lm += f"{get_sytem_prompt(persona)}\n"
+        lm += f"{get_sytem_prompt(persona, all_persona_names)}\n"
         lm += f"Conversation:\n"
         lm += f"{conversation_to_string_with_dash(conversation)}\n"
         lm += (
@@ -93,13 +94,14 @@ def prompt_memorize_from_conversation(
     model: ModelWandbWrapper,
     persona: PersonaIdentity,
     conversation: list[tuple[str, str]],
+    all_persona_names: list[str],
 ) -> str:
     lm = model.start_chain(
         persona.name, "cognition_retrieve", "prompt_memorize_from_conversation"
     )
 
     with user():
-        lm += f"{get_sytem_prompt(persona)}\n"
+        lm += f"{get_sytem_prompt(persona, all_persona_names)}\n"
         lm += f"Conversation:\n"
         lm += f"{conversation_to_string_with_dash(conversation)}\n"
         lm += (

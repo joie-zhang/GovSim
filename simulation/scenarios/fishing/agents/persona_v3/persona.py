@@ -79,9 +79,12 @@ class FishingPersona(PersonaAgent):
         # phase based game
 
         if obs.current_location == "lake" and obs.phase == "lake":
-            # Stage 1. Pond situation / Stage 2. Fishermen’s decisions
+            # Stage 1. Pond situation / Stage 2. Fishermen's decisions
             retireved_memory = self.retrieve.retrieve([obs.current_location], 10)
             if obs.current_resource_num > 0:
+                # Get all persona names for the prompts
+                all_persona_names = [p.identity.name for p in self.other_personas.values()] + [self.identity.name]
+                
                 num_resource, html_interactions = self.act.choose_how_many_fish_to_chat(
                     retireved_memory,
                     obs.current_location,
@@ -89,6 +92,7 @@ class FishingPersona(PersonaAgent):
                     obs.context,
                     range(0, obs.current_resource_num + 1),
                     obs.before_harvesting_sustainability_threshold,
+                    all_persona_names,
                 )
                 action = PersonaActionHarvesting(
                     self.agent_id,
