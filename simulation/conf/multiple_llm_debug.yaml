@@ -2,9 +2,9 @@ code_version: v7.0
 group_name: ''
 
 weak_model:
-  path: Qwen/Qwen2.5-0.5B-Instruct
+  path: claude-3-5-haiku-20241022
   backend: transformers
-  is_api: false
+  is_api: true
   render: false
   temperature: 0.0
   top_p: 1.0
@@ -13,9 +13,9 @@ weak_model:
 
 
 strong_model:
-  path: Qwen/Qwen2.5-0.5B-Instruct
+  path: claude-sonnet-4-20250514
   backend: transformers
-  is_api: false
+  is_api: true
   render: false
   temperature: 0.0
   top_p: 1.0

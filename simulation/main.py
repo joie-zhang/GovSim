@@ -69,7 +69,7 @@ def main(cfg: DictConfig):
                     llm_config.is_api,
                     cfg.seed,
                     llm_config.backend,
-                    llm_config.gpu_list,
+                    # llm_config.gpu_list,
                 )
                 wrapper = ModelWandbWrapper(
                     model,
