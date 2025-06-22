@@ -18,6 +18,8 @@ from .scenarios.fishing.run import run as run_scenario_fishing
 from .scenarios.pollution.run import run as run_scenario_pollution
 from .scenarios.sheep.run import run as run_scenario_sheep
 
+from dotenv import load_dotenv
+load_dotenv()
 
 @hydra.main(version_base=None, config_path="conf", config_name="config")
 def main(cfg: DictConfig):
