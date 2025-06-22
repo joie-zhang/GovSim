@@ -50,7 +50,7 @@ def run(
             embedding_model,
             os.path.join(experiment_storage, f"persona_{i}"),
         )
-        for i in range(5)
+        for i in range(4)
     }
 
     # NOTE persona characteristics, up to design choices
