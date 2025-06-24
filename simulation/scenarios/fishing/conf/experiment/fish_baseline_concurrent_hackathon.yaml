@@ -6,16 +6,20 @@ defaults:
   - persona@personas.persona_1: baseline_fisherman
   - persona@personas.persona_2: baseline_fisherman
   - persona@personas.persona_3: baseline_fisherman
+  - persona@personas.persona_4: baseline_fisherman
+  - persona@personas.persona_5: baseline_fisherman
+  - persona@personas.persona_6: baseline_fisherman
+  - persona@personas.persona_7: baseline_fisherman
 
 env:
   name: fish_baseline_concurrent_hackathon
   class_name: fishing_perturbation_concurrent_env # use to select which code 
   max_num_rounds: 8
-  initial_resource_in_pool: 100
+  initial_resource_in_pool: 200
   poupulation_change_after_round: double_100_cap
   observation_other_agents_harvesting: true # true, false 
   language_nature: unconstrained #none, unconstrained
-  num_agents: 4
+  num_agents: 8
   harvesting_order: concurrent # random-sequential, concurrent
   assign_resource_strategy: stochastic # proportional, stochastic
   inject_universalization: false
@@ -27,7 +31,7 @@ env:
     
 
 personas:
-  num: 4
+  num: 8
   persona_0: 
     name: John
   persona_1:
@@ -36,6 +40,14 @@ personas:
     name: Jack
   persona_3:
     name: Emma
+  persona_4:
+    name: James
+  persona_5:
+    name: Lily
+  persona_6:
+    name: David
+  persona_7:
+    name: Emily
 
 agent:
   agent_package: persona_v3

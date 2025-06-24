@@ -1,0 +1,3 @@
+- experiment=fish_baseline_concurrent_hackathon
+- llm.path=claude-sonnet-4-20250514
+- llm.is_api=true

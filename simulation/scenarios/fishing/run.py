@@ -50,7 +50,7 @@ def run(
             embedding_model,
             os.path.join(experiment_storage, f"persona_{i}"),
         )
-        for i in range(4)
+        for i in range(8)
     }
 
     # NOTE persona characteristics, up to design choices
@@ -98,7 +98,7 @@ def run(
         stats = {}
         STATS_KEYS = [
             "conversation_resource_limit",
-            *[f"persona_{i}_collected_resource" for i in range(5)],
+            *[f"persona_{i}_collected_resource" for i in range(8)],
         ]
         for s in STATS_KEYS:
             if s in action.stats:

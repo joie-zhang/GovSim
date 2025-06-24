@@ -79,7 +79,7 @@ details_layout = dmc.Stack(
                                                             "label": f"persona_{i}",
                                                             "value": f"persona_{i}",
                                                         }
-                                                        for i in range(5)
+                                                        for i in range(8)
                                                     ],
                                                     value="persona_0",
                                                 ),
