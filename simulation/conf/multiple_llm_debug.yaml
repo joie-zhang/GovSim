@@ -8,8 +8,7 @@ weak_model:
   render: false
   temperature: 0.0
   top_p: 1.0
-  gpu_list: 
-  - 0
+  gpu_list: None
 
 
 strong_model:
@@ -19,14 +18,12 @@ strong_model:
   render: false
   temperature: 0.0
   top_p: 1.0
-  gpu_list: 
-  - 0
+  gpu_list: None
 
 mix_llm:
 - llm: ${strong_model}
-- llm: ${strong_model}
-- llm: ${strong_model}
-- llm: ${strong_model}
+- llm: ${weak_model}
+- llm: ${weak_model}
 - llm: ${weak_model}
 
 framework_model: ${strong_model}
