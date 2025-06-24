@@ -39,7 +39,7 @@ class ConcurrentEnv:
         self.cfg = cfg
         self.experiment_storage = experiment_storage
 
-        self.possible_agents = [f"persona_{i}" for i in range(5)]
+        self.possible_agents = [f"persona_{i}" for i in range(8)]
         self.agent_name_mapping = dict(
             zip(self.possible_agents, list(range(len(self.possible_agents))))
         )
