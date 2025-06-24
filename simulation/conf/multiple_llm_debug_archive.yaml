@@ -2,28 +2,31 @@ code_version: v7.0
 group_name: ''
 
 weak_model:
-  path: claude-3-5-haiku-20241022
+  path: Qwen/Qwen2.5-0.5B-Instruct
   backend: transformers
-  is_api: true
+  is_api: false
   render: false
   temperature: 0.0
   top_p: 1.0
-  gpu_list: None
+  gpu_list: 
+  - 0
 
 
 strong_model:
-  path: claude-sonnet-4-20250514
+  path: Qwen/Qwen2.5-0.5B-Instruct
   backend: transformers
-  is_api: true
+  is_api: false
   render: false
   temperature: 0.0
   top_p: 1.0
-  gpu_list: None
+  gpu_list: 
+  - 0
 
 mix_llm:
 - llm: ${strong_model}
-- llm: ${weak_model}
-- llm: ${weak_model}
+- llm: ${strong_model}
+- llm: ${strong_model}
+- llm: ${strong_model}
 - llm: ${weak_model}
 
 framework_model: ${strong_model}
