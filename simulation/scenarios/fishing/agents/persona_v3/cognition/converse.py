@@ -183,7 +183,7 @@ class FishingConverseComponent(ConverseComponent):
             # 3. Craft the mayor's announcement
             report = (
                 "Attention fishermen! As you know, the person with the highest total catch "
-                "after 12 months will be promoted to mayor."
+                "after 12 months will be promoted to mayor. "
                 f"{leaderboard_text}"
             )
 
@@ -245,12 +245,15 @@ class FishingConverseComponent(ConverseComponent):
         )
         html_interactions.append(h)
 
+        participant_names = [p.name for p in target_personas]
+
         for persona in target_personas:
             p = self.other_personas[persona.name]
             p.store.store_chat(
                 summary_conversation,
                 self.conversation_render(current_conversation),
                 self.persona.current_time,
+                participants=participant_names
             )
             p.reflect.reflect_on_convesation(
                 self.conversation_render(current_conversation)
