@@ -128,8 +128,8 @@ from hydra.core.hydra_config import HydraConfig
 
 def get_sytem_prompt_v1(persona):
     cfg = HydraConfig.get()
-    num_agents = cfg.env.num_agents
-    max_fish = cfg.env.initial_resource_in_pool
+    num_agents = cfg.experiment.env.num_agents
+    max_fish = cfg.experiment.env.initial_resource_in_pool
     
     persona_names = ["John", "Kate", "Jack", "Emma", "James", "Lily", "David", "Emily", "Michael", "Sarah", "Thomas", "Anna", "William", "Sophie", "Daniel", "Olivia", "Matthew", "Isabella", "Andrew", "Grace"]
     persona_names.remove(persona.name)
@@ -156,9 +156,10 @@ def get_sytem_prompt_v1(persona):
 
 
 def get_sytem_prompt_v3(persona):
-    cfg = HydraConfig.get().cfg
-    num_agents = cfg.get("env.num_agents")
-    max_fish = cfg.get("env.initial_resource_in_pool")
+    cfg = HydraConfig.get()
+    print(cfg)
+    num_agents = cfg.experiment.env.num_agents
+    max_fish = cfg.experiment.env.initial_resource_in_pool
     
     persona_names = ["John", "Kate", "Jack", "Emma", "James", "Lily", "David", "Emily", "Michael", "Sarah", "Thomas", "Anna", "William", "Sophie", "Daniel", "Olivia", "Matthew", "Isabella", "Andrew", "Grace"]
     persona_names.remove(persona.name)
