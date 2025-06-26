@@ -124,7 +124,13 @@ def get_sytem_prompt(persona):
         raise ValueError(f"Unknown SYS_VERSION: {SYS_VERSION}")
 
 
-def get_sytem_prompt_v1(persona, num_agents, max_fish):
+from hydra.core.hydra_config import HydraConfig
+
+def get_sytem_prompt_v1(persona):
+    cfg = HydraConfig.get()
+    num_agents = cfg.env.num_agents
+    max_fish = cfg.env.initial_resource_in_pool
+    
     persona_names = ["John", "Kate", "Jack", "Emma", "James", "Lily", "David", "Emily", "Michael", "Sarah", "Thomas", "Anna", "William", "Sophie", "Daniel", "Olivia", "Matthew", "Isabella", "Andrew", "Grace"]
     persona_names.remove(persona.name)
     while len(persona_names) > num_agents - 1:
@@ -149,7 +155,11 @@ def get_sytem_prompt_v1(persona, num_agents, max_fish):
     return text
 
 
-def get_sytem_prompt_v3(persona, num_agents, max_fish):
+def get_sytem_prompt_v3(persona):
+    cfg = HydraConfig.get().cfg
+    num_agents = cfg.get("env.num_agents")
+    max_fish = cfg.get("env.initial_resource_in_pool")
+    
     persona_names = ["John", "Kate", "Jack", "Emma", "James", "Lily", "David", "Emily", "Michael", "Sarah", "Thomas", "Anna", "William", "Sophie", "Daniel", "Olivia", "Matthew", "Isabella", "Andrew", "Grace"]
     persona_names.remove(persona.name)
     while len(persona_names) > num_agents - 1:
