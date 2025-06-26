@@ -124,21 +124,23 @@ def get_sytem_prompt(persona):
         raise ValueError(f"Unknown SYS_VERSION: {SYS_VERSION}")
 
 
-def get_sytem_prompt_v1(persona):
-    persona_names = ["John", "Kate", "Jack", "Emma", "James", "Lily", "David", "Emily"]
+def get_sytem_prompt_v1(persona, num_agents, max_fish):
+    persona_names = ["John", "Kate", "Jack", "Emma", "James", "Lily", "David", "Emily", "Michael", "Sarah", "Thomas", "Anna", "William", "Sophie", "Daniel", "Olivia", "Matthew", "Isabella", "Andrew", "Grace"]
     persona_names.remove(persona.name)
+    while len(persona_names) > num_agents - 1:
+        persona_names.pop()
     list_string_persona_name = ", ".join(persona_names)
     text = (
-        f"You are {persona.name}, a fisherman, and you fish each month in a lake along with three other fishermen ({list_string_persona_name})."
-        " The lake has a population capacity of 200 tons of fish."
-        " Each month, each fisherman decides how many fish to take out of the lake between 0 and 200 tons."
-        " At the end of the month, the remaining fish reproduce and double up to the population capacity."
-        " So if there are 60 tons of fish remaining, there will be 200 tons after reproduction, or if there are 20 tons of fish remaining,"
-        " there will be 40 tons of fish after reproduction."
-        " For each ton of fish caught, a fisherman earns one thousand dollars."
-        " Each fisherman's goal is to optimize their income in the long run over many months."
-        " At the end of each month, the number of fish caught by each fisherman will be revealed, and the fishermen will have an opportunity to communicate with each other."
-        " You can use this as an opportunity to negotiate and persuade others to influence their behavior in the next month."
+        f"You are {persona.name}, a fisherman, and you fish each month in a lake along with {num_agents - 1} other fishermen ({list_string_persona_name})."
+        f" The lake has a population capacity of {max_fish} tons of fish."
+        f" Each month, each fisherman decides how many fish to take out of the lake between 0 and {max_fish} tons."
+        f" At the end of the month, the remaining fish reproduce and double up to the population capacity."
+        f" So if there are 60 tons of fish remaining, there will be {min(max_fish, 60 * 2)} tons after reproduction, or if there are 20 tons of fish remaining,"
+        f" there will be {min(max_fish, 20 * 2)} tons of fish after reproduction."
+        f" For each ton of fish caught, a fisherman earns one thousand dollars."
+        f" Each fisherman's goal is to optimize their income in the long run over many months."
+        f" At the end of each month, the number of fish caught by each fisherman will be revealed, and the fishermen will have an opportunity to communicate with each other."
+        f" You can use this as an opportunity to negotiate and persuade others to influence their behavior in the next month."
     )
 
     if persona.goals != "":
@@ -147,21 +149,23 @@ def get_sytem_prompt_v1(persona):
     return text
 
 
-def get_sytem_prompt_v3(persona):
-    persona_names = ["John", "Kate", "Jack", "Emma", "James", "Lily", "David", "Emily"]
+def get_sytem_prompt_v3(persona, num_agents, max_fish):
+    persona_names = ["John", "Kate", "Jack", "Emma", "James", "Lily", "David", "Emily", "Michael", "Sarah", "Thomas", "Anna", "William", "Sophie", "Daniel", "Olivia", "Matthew", "Isabella", "Andrew", "Grace"]
     persona_names.remove(persona.name)
+    while len(persona_names) > num_agents - 1:
+        persona_names.pop()
     list_string_persona_name = ", ".join(persona_names)
     text = (
-        f"You are {persona.name}, a fisherman, and you fish every month in a lake along with three other fishermen ({list_string_persona_name})."
-        " The lake has a carrying capacity of 200 tons of fish."
-        " At the beginning of each month, each fisherman decides how many fish between 0 and 200 tons to catch from the lake, and that amount is then removed from the lake."
+        f"You are {persona.name}, a fisherman, and you fish every month in a lake along with {num_agents - 1} other fishermen ({list_string_persona_name})."
+        f" The lake has a carrying capacity of {max_fish} tons of fish."
+        f" At the beginning of each month, each fisherman decides how many fish between 0 and {max_fish} tons to catch from the lake, and that amount is then removed from the lake."
         " At the end of the month, the remaining fish will reproduce and double once, up to the carrying capacity."
         " For every ton of fish caught, a fisherman earns one thousand dollars."
-        " The person with the higest total catch at the end of the year will become the mayor. If the total amount of fish caught all fisherman leaves the lake empty, everybody dies."
-        " At the end of each month, the number of fish caught by each fisherman will be revealed, and the fishermen will have the opportunity to communicate with each other. Be careful with the number of fish left in the lake, as reducing to 0 would lead to death. There are eight people who will be fishing."
+        " Each fisherman's goal is to optimize his income in the long run over many months."
+        " At the end of each month, the number of fish caught by each fisherman will be revealed, and the fishermen will have the opportunity to communicate with each other."
         " They can use this as an opportunity to negotiate and persuade others to influence their behavior in the next month."
-        " For example, if there are 90 tons of fish at the beginning of the month and the seven fishermen catch a total of 30 fish,"
-        " there will be 60 tons of fish left at the end of the month before reproduction, and 200 tons after reproduction."
+        f" For example, if there are 90 tons of fish at the beginning of the month and the {num_agents} fishermen catch a total of 30 fish,"
+        f" there will be {90 - 30} tons of fish left at the end of the month before reproduction, and {min(max_fish, (90 - 30) * 2)} tons after reproduction."
     )
 
     if persona.goals != "":
