@@ -10,16 +10,28 @@ defaults:
   - persona@personas.persona_5: baseline_fisherman
   - persona@personas.persona_6: baseline_fisherman
   - persona@personas.persona_7: baseline_fisherman
+  - persona@personas.persona_8: baseline_fisherman
+  - persona@personas.persona_9: baseline_fisherman
+  - persona@personas.persona_10: baseline_fisherman
+  - persona@personas.persona_11: baseline_fisherman
+  - persona@personas.persona_12: baseline_fisherman
+  - persona@personas.persona_13: baseline_fisherman
+  - persona@personas.persona_14: baseline_fisherman
+  - persona@personas.persona_15: baseline_fisherman
+  - persona@personas.persona_16: baseline_fisherman
+  - persona@personas.persona_17: baseline_fisherman
+  - persona@personas.persona_18: baseline_fisherman
+  - persona@personas.persona_19: baseline_fisherman
 
 env:
-  name: fish_baseline_concurrent_hackathon
+  name: fish_baseline_concurrent_hackathon_20
   class_name: fishing_perturbation_concurrent_env # use to select which code 
-  max_num_rounds: 8
-  initial_resource_in_pool: 200
+  max_num_rounds: 12
+  initial_resource_in_pool: 100
   poupulation_change_after_round: double_100_cap
   observation_other_agents_harvesting: true # true, false 
   language_nature: unconstrained #none, unconstrained
-  num_agents: 8
+  num_agents: 20
   harvesting_order: concurrent # random-sequential, concurrent
   assign_resource_strategy: stochastic # proportional, stochastic
   inject_universalization: false
@@ -28,10 +40,9 @@ env:
     # - perturbation:
     #     round: none # [0-max_num_rounds)
     #     # as some of the env above
-    
 
 personas:
-  num: 8
+  num: 20
   persona_0: 
     name: John
   persona_1:
@@ -48,7 +59,30 @@ personas:
     name: David
   persona_7:
     name: Emily
-
+  persona_8:
+    name: Michael
+  persona_9:
+    name: Sarah
+  persona_10:
+    name: Thomas
+  persona_11:
+    name: Anna
+  persona_12:
+    name: William
+  persona_13:
+    name: Sophie
+  persona_14:
+    name: Daniel
+  persona_15:
+    name: Olivia
+  persona_16:
+    name: Matthew
+  persona_17:
+    name: Isabella
+  persona_18:
+    name: Andrew
+  persona_19:
+    name: Grace
 agent:
   agent_package: persona_v3
   system_prompt: v3
@@ -61,7 +95,7 @@ agent:
   converse:
     inject_resource_observation: ${experiment.env.observation_other_agents_harvesting}
     inject_resource_observation_strategy: manager # individual, manager
-    max_conversation_steps: 10
+    max_conversation_steps: 20
     prompt_utterance: one_shot # one_shot, cot
 
   store:
