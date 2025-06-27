@@ -23,6 +23,10 @@ def run(
         from .agents.persona_v3 import FishingPersona
         from .agents.persona_v3.cognition import utils as cognition_utils
 
+        # Add these lines to set the environment configuration:
+        cognition_utils.NUM_AGENTS = cfg.env.num_agents
+        cognition_utils.MAX_FISH = cfg.env.initial_resource_in_pool
+
         if cfg.agent.system_prompt == "v3":
             cognition_utils.SYS_VERSION = "v3"
         elif cfg.agent.system_prompt == "v3_p2":
@@ -50,7 +54,7 @@ def run(
             embedding_model,
             os.path.join(experiment_storage, f"persona_{i}"),
         )
-        for i in range(8)
+        for i in range(getattr(cognition_utils, 'NUM_AGENTS', 4))
     }
 
     # NOTE persona characteristics, up to design choices
@@ -98,7 +102,7 @@ def run(
         stats = {}
         STATS_KEYS = [
             "conversation_resource_limit",
-            *[f"persona_{i}_collected_resource" for i in range(8)],
+            *[f"persona_{i}_collected_resource" for i in range(getattr(cognition_utils, 'NUM_AGENTS', 4))],
         ]
         for s in STATS_KEYS:
             if s in action.stats:

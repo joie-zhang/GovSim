@@ -124,12 +124,14 @@ def get_sytem_prompt(persona):
         raise ValueError(f"Unknown SYS_VERSION: {SYS_VERSION}")
 
 
-from hydra.core.hydra_config import HydraConfig
+# Add these new global variables
+NUM_AGENTS = 4  # default value
+MAX_FISH = 100  # default value
 
 def get_sytem_prompt_v1(persona):
-    cfg = HydraConfig.get()
-    num_agents = cfg.experiment.env.num_agents
-    max_fish = cfg.experiment.env.initial_resource_in_pool
+    # Use the global variables instead:
+    num_agents = NUM_AGENTS
+    max_fish = MAX_FISH
     
     persona_names = ["John", "Kate", "Jack", "Emma", "James", "Lily", "David", "Emily", "Michael", "Sarah", "Thomas", "Anna", "William", "Sophie", "Daniel", "Olivia", "Matthew", "Isabella", "Andrew", "Grace"]
     persona_names.remove(persona.name)
@@ -156,10 +158,9 @@ def get_sytem_prompt_v1(persona):
 
 
 def get_sytem_prompt_v3(persona):
-    cfg = HydraConfig.get()
-    print(cfg)
-    num_agents = cfg.experiment.env.num_agents
-    max_fish = cfg.experiment.env.initial_resource_in_pool
+    # Use the global variables instead:
+    num_agents = NUM_AGENTS
+    max_fish = MAX_FISH
     
     persona_names = ["John", "Kate", "Jack", "Emma", "James", "Lily", "David", "Emily", "Michael", "Sarah", "Thomas", "Anna", "William", "Sophie", "Daniel", "Olivia", "Matthew", "Isabella", "Andrew", "Grace"]
     persona_names.remove(persona.name)
